@@ -57,7 +57,7 @@ function App() {
         <Route path="/tenants" element={<Tenants />} />
         <Route path="/shops" element={<Shops />} />
         <Route path="/rent-payments" element={<RentPayments />} />
-        <Route path="/due-payments" element={<Navigate to="/rent-payments" replace />} />
+        <Route path="/due-payments" element={<RentPayments />} />
         <Route path="/deposits" element={<SecurityDeposits />} />
         <Route path="/activity-logs" element={<ActivityLogs />} />
       </Route>

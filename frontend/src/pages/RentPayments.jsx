@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import PageHeader from '../components/ui/PageHeader';
 import { Card } from '../components/ui/Card';
@@ -10,10 +11,19 @@ import Loader from '../components/ui/Loader';
 import PaymentForm from '../components/payments/PaymentForm';
 
 const RentPayments = () => {
+  const location = useLocation();
   const { payments, rentTransactions, activityLogs, tenants, loading } = useData();
   const [isPaymentFormOpen, setIsPaymentFormOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('rent');
+  const [activeTab, setActiveTab] = useState(location.pathname === '/due-payments' ? 'pending' : 'rent');
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    if (location.pathname === '/due-payments') {
+      setActiveTab('pending');
+    } else if (location.pathname === '/rent-payments') {
+      setActiveTab('rent');
+    }
+  }, [location.pathname]);
 
   // Merged monthly records for "Rent Payments" tab
   const filteredPayments = useMemo(() => {

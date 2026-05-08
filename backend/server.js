@@ -12,7 +12,13 @@ if (process.env.NODE_ENV !== 'test') {
 const app = express();
 
 // Middleware
-app.use(cors());
+const cors = require("cors");
+
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 app.use(express.json());
 
 // Basic test route

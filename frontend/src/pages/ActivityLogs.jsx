@@ -37,7 +37,7 @@ const ActivityLogs = () => {
             {activityLogs.map((log) => (
               <motion.div key={log._id} variants={item} className="p-5 hover:bg-slate-50 transition-colors flex items-center justify-between">
                 <div className="flex gap-4 items-center">
-                  <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center shrink-0">
                     <ArrowRight className="w-4 h-4 text-indigo-500" />
                   </div>
                   <div>

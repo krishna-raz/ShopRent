@@ -18,6 +18,18 @@ router.get('/', protect, async (req, res, next) => {
   }
 });
 
+// @desc    Get all deposit transactions
+// @route   GET /api/deposits/transactions
+// @access  Private
+router.get('/transactions', protect, async (req, res, next) => {
+  try {
+    const transactions = await DepositTransaction.find().sort({ date: -1 });
+    res.json(transactions);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // @desc    Get deposits by status
 // @route   GET /api/deposits/status/:status
 // @access  Private

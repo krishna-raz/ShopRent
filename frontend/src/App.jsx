@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
 import { useAuth } from './context/AuthContext';
@@ -11,6 +10,7 @@ import TenantDashboard from './pages/TenantDashboard';
 import RentPayments from './pages/RentPayments';
 import SecurityDeposits from './pages/SecurityDeposits';
 import ActivityLogs from './pages/ActivityLogs';
+import Users from './pages/Users';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -60,6 +60,7 @@ function App() {
         <Route path="/due-payments" element={<RentPayments />} />
         <Route path="/deposits" element={<SecurityDeposits />} />
         <Route path="/activity-logs" element={<ActivityLogs />} />
+        <Route path="/users" element={<Users />} />
       </Route>
     </Routes>
   );

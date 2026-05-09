@@ -74,7 +74,7 @@ const createTenant = async (req, res, next) => {
         description: `Tenant ${tenantName} added with deposit ₹${securityDeposit}`,
         entityType: 'Tenant',
         entityId: tenant._id,
-        performedBy: req.user._id,
+        performedBy: req.user?._id || null,
       }).catch(err => console.error('Failed to log activity:', err.message));
     });
 
@@ -99,41 +99,26 @@ const processRefund = async (req, res, next) => {
 
     const balanceBefore = tenant.refundableAmount;
     const amount = parseFloat(deductionAmount) || 0;
-    
+
     // Calculate new refundable amount
     // If it's a deduction or refund, we subtract from the current refundable balance
     const newRefundable = Math.max(0, balanceBefore - amount);
 
     let status = 'Active';
-    if (newRefundable === 0 && amount > 0) {
-      status = 'Deducted';
-    } else if (amount > 0 && newRefundable > 0) {
+    // Check if this is a full refund (balance was fully deducted)
+    if (newRefundable === 0) {
+      status = amount > 0 ? 'Refunded' : (balanceBefore === 0 ? 'Active' : 'Refunded');
+    } else if (amount > 0) {
       status = 'Partial Refund';
-    } else if (amount === 0 && newRefundable === 0) {
-      status = 'Refunded'; // Full refund processed
     }
 
     tenant.refundableAmount = newRefundable;
     tenant.depositStatus = status;
     tenant.refundDate = new Date();
 
-    const updatedTenant = await tenant.save();
-
-    // If fully refunded or deducted (move-out settlement), vacate the shop
-    if (status === 'Refunded' || status === 'Deducted') {
-      await Shop.findByIdAndUpdate(tenant.shopId, {
-        occupancyStatus: 'Vacant',
-        tenantId: null
-      });
-      
-      // Update tenant status to Inactive
-      tenant.status = 'Inactive';
-      await tenant.save();
-    }
-
-    // Record deposit transaction (non-blocking)
+    // Record deposit transaction BEFORE deletion (non-blocking)
+    const transactionType = amount > 0 ? 'Deduction' : 'Refund';
     setImmediate(() => {
-      const transactionType = amount > 0 ? 'Deduction' : 'Refund';
       DepositTransaction.create({
         tenantId: tenant._id,
         tenantName: tenant.tenantName,
@@ -146,18 +131,42 @@ const processRefund = async (req, res, next) => {
       }).catch(err => console.error('Failed to record deposit transaction:', err.message));
     });
 
-    // Log activity (non-blocking)
-    setImmediate(() => {
-      logActivity({
-        action: 'Deposit Refund Processed',
-        description: `Refund processed for ${tenant.tenantName}. Deducted: ₹${amount}. Refunded: ₹${newRefundable}. Status: ${status}`,
-        entityType: 'Deposit',
-        entityId: tenant._id,
-        performedBy: req.user._id,
-      }).catch(err => console.error('Failed to log activity:', err.message));
-    });
+    // If fully refunded or deducted (move-out settlement), vacate the shop and delete tenant
+    if (status === 'Refunded' || status === 'Deducted') {
+      // Store tenant data before deletion for logging
+      const tenantData = {
+        _id: tenant._id.toString(),
+        tenantName: tenant.tenantName,
+        securityDeposit: tenant.securityDeposit
+      };
 
-    res.json(updatedTenant);
+      await Shop.findByIdAndUpdate(tenant.shopId, {
+        occupancyStatus: 'Vacant',
+        tenantId: null
+      });
+
+      // Delete tenant from database (complete removal after deposit settlement)
+      await Tenant.findByIdAndDelete(req.params.id);
+
+      // Log activity for deletion (non-blocking)
+      setImmediate(() => {
+        logActivity({
+          action: 'Tenant Removed',
+          description: `Tenant ${tenantData.tenantName} removed after full deposit refund of ₹${tenantData.securityDeposit}`,
+          entityType: 'Tenant',
+          entityId: tenantData._id,
+          performedBy: req.user._id,
+        }).catch(err => console.error('Failed to log activity:', err.message));
+      });
+
+      return res.json({ message: 'Tenant removed successfully', deletedId: req.params.id });
+    } else {
+      // Just mark as inactive for partial refunds
+      tenant.status = 'Inactive';
+      await tenant.save();
+    }
+
+    res.json(tenant);
   } catch (error) {
     next(error);
   }

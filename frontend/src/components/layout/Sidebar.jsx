@@ -1,15 +1,15 @@
-import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Store, 
-  ReceiptIndianRupee, 
-  History, 
-  ShieldCheck, 
+import {
+  LayoutDashboard,
+  Users,
+  Store,
+  ReceiptIndianRupee,
+  History,
+  ShieldCheck,
   ScrollText,
   ChevronRight,
-  LogOut
+  LogOut,
+  UserCog
 } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useAuth } from '../../context/AuthContext';
@@ -31,12 +31,13 @@ const Sidebar = () => {
     { name: 'Due Payments', path: '/due-payments', icon: History },
     { name: 'Security Deposits', path: '/deposits', icon: ShieldCheck },
     { name: 'Activity Logs', path: '/activity-logs', icon: ScrollText },
+    ...(user?.role === 'superadmin' ? [{ name: 'Users', path: '/users', icon: UserCog }] : []),
   ];
 
   return (
     <aside className="hidden lg:flex flex-col w-64 h-screen sticky top-0 bg-white border-r border-slate-200">
       <div className="p-6">
-        <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+        <h1 className="text-xl font-bold bg-linear-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
           ShopRent Pro
         </h1>
         {user && (

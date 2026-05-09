@@ -19,19 +19,21 @@ export const DataProvider = ({ children }) => {
   const [payments, setPayments] = useState([]);
   const [rentTransactions, setRentTransactions] = useState([]);
   const [activityLogs, setActivityLogs] = useState([]);
+  const [depositTransactions, setDepositTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     if (!user) return;
-    
+
     setLoading(true);
     try {
-      const [shopsRes, tenantsRes, paymentsRes, transactionsRes, logsRes] = await Promise.all([
+      const [shopsRes, tenantsRes, paymentsRes, transactionsRes, logsRes, depositsRes] = await Promise.all([
         api.get('/shops'),
         api.get('/tenants'),
         api.get('/payments'),
         api.get('/payments/transactions'),
-        api.get('/activity-logs')
+        api.get('/activity-logs'),
+        api.get('/deposits/transactions')
       ]);
 
       // Map backend data to frontend structure to avoid breaking UI components
@@ -90,11 +92,25 @@ export const DataProvider = ({ children }) => {
         date: p.paymentDate || p.createdAt
       }));
 
+      const mappedDeposits = (depositsRes.data || []).map(d => ({
+        _id: d._id,
+        tenantId: d.tenantId?._id || d.tenantId,
+        tenantName: d.tenantName,
+        shopNumber: d.shopNumber,
+        type: d.type,
+        amount: d.amount,
+        reason: d.reason,
+        balanceBefore: d.balanceBefore,
+        balanceAfter: d.balanceAfter,
+        date: d.date || d.createdAt
+      }));
+
       setShops(mappedShops);
       setTenants(mappedTenants);
       setPayments(mappedPayments);
       setRentTransactions(transactionsRes.data);
       setActivityLogs(mappedLogs);
+      setDepositTransactions(mappedDeposits);
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to load data from server');
@@ -155,14 +171,20 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const processRefund = async (tenantId) => {
+  const processRefund = async (tenantId, refundableAmount) => {
     try {
-      // For a full refund, deductionAmount is 0
-      await api.put(`/tenants/${tenantId}/refund`, {
-        deductionAmount: 0,
+      // For a full refund, deduct the full refundable amount
+      const res = await api.put(`/tenants/${tenantId}/refund`, {
+        deductionAmount: refundableAmount,
         deductionReason: 'Full refund processed'
       });
-      toast.success('Deposit successfully refunded!');
+
+      if (res.data.deletedId) {
+        // Tenant was deleted, show success and refresh
+        toast.success('Deposit refunded and tenant removed successfully!');
+      } else {
+        toast.success('Deposit successfully refunded!');
+      }
       fetchData();
     } catch (error) {
       toast.error('Failed to process refund');
@@ -180,6 +202,7 @@ export const DataProvider = ({ children }) => {
     tenants,
     payments,
     rentTransactions,
+    depositTransactions,
     activityLogs,
     loading,
     addTenant,

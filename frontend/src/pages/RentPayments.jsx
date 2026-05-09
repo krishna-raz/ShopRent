@@ -88,7 +88,7 @@ const RentPayments = () => {
   if (loading) return <Loader />;
 
   return (
-    <div className="pb-20">
+    <div className="pb-24 lg:pb-20">
       <PageHeader 
         title="Finance & History" 
         description="Track monthly rent collections and security deposit transactions."

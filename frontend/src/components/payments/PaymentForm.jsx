@@ -23,6 +23,11 @@ const PaymentForm = ({ isOpen, onClose }) => {
   const activeTenants = tenants.filter(t => t.status === 'Active');
 
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
+
+  useEffect(() => {
     if (formData.tenantId && formData.month) {
       const selectedTenant = activeTenants.find(t => t._id === formData.tenantId);
       if (selectedTenant) {
@@ -63,12 +68,12 @@ const PaymentForm = ({ isOpen, onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 p-4 bg-slate-900/60 backdrop-blur-sm overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="w-full max-w-lg"
+          className="w-full max-w-lg mb-20 sm:mb-0"
         >
           <Card className="overflow-hidden shadow-2xl border-none">
             <div className="bg-emerald-600 p-6 flex justify-between items-center text-white">

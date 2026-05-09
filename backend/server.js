@@ -4,9 +4,8 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const { errorHandler } = require('./middleware/errorHandler');
 
-// Connect to database (only in non-serverless environments)
-const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
-if (!isVercel && process.env.NODE_ENV !== 'test') {
+// Connect to database
+if (process.env.NODE_ENV !== 'test') {
   connectDB();
 }
 
@@ -37,16 +36,12 @@ app.use('/api/activity-logs', require('./routes/activityLogs'));
 // Error Handler
 app.use(errorHandler);
 
-// Vercel serverless export
-if (isVercel) {
-  module.exports = app;
-} else {
-  // Local development
-  const PORT = process.env.PORT || 5000;
-  if (process.env.NODE_ENV !== 'test') {
-    app.listen(PORT, () => {
-      console.log(`Server running in development mode on port ${PORT}`);
-    });
-  }
-  module.exports = app;
+const PORT = process.env.PORT || 5000;
+
+if (process.env.NODE_ENV !== 'test' && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
 }
+
+module.exports = app;

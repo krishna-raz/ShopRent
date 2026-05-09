@@ -1,22 +1,35 @@
 const mongoose = require('mongoose');
 
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
 const connectDB = async () => {
-  try {
-    // Add timeout options for serverless environments
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
     const options = {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
     };
 
-    const conn = await mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI, options);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    console.error(`MongoDB Connection Error: ${error.message}`);
-    // Don't exit in serverless - let the function handle the error
-    if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
-      process.exit(1);
-    }
+    cached.promise = mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI, options)
+      .then((conn) => {
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        return conn;
+      })
+      .catch((error) => {
+        console.error(`MongoDB Connection Error: ${error.message}`);
+        cached.promise = null;
+        throw error;
+      });
   }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
 };
 
 module.exports = connectDB;

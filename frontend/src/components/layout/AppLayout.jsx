@@ -10,9 +10,11 @@ const AppLayout = () => {
       <Sidebar />
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0">
-        <div className="flex-1 p-4 lg:p-8 pb-24 lg:pb-8 max-w-7xl mx-auto w-full">
-          <Outlet />
+      <main className="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <div className="flex-1 p-4 lg:p-8 lg:pb-8 overflow-y-auto">
+          <div className="pb-24 lg:pb-0">
+            <Outlet />
+          </div>
         </div>
       </main>
 

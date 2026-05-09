@@ -34,7 +34,7 @@ const Tenants = () => {
   };
 
   return (
-    <div className="pb-20 relative min-h-[80vh]">
+    <div className="relative">
       <PageHeader 
         title="Tenant Directory" 
         description="Manage your tenant records and shop allocations."

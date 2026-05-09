@@ -26,7 +26,7 @@ export const CardHeader = ({ title, description, children, className }) => (
         <h3 className="font-semibold text-slate-900 text-lg">{title}</h3>
         {description && <p className="text-sm text-slate-500 mt-1">{description}</p>}
       </div>
-      {children && <div className="flex-shrink-0">{children}</div>}
+      {children && <div className="shrink-0">{children}</div>}
     </div>
   </div>
 );

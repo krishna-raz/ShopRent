@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
 import { X } from 'lucide-react';
 import Button from '../ui/Button';
@@ -6,6 +6,11 @@ import FormField from '../ui/FormField';
 
 const ShopForm = ({ onClose, onSuccess, shop = null }) => {
   const isEditing = !!shop;
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   const [formData, setFormData] = useState({
     shopNumber: shop?.shopNumber || '',

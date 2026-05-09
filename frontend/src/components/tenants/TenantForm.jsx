@@ -5,6 +5,10 @@ import Button from '../ui/Button';
 import FormField from '../ui/FormField';
 
 const TenantForm = ({ onClose, onSuccess, initialShopId }) => {
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, []);
   const [formData, setFormData] = useState({
     tenantName: '',
     phone: '',

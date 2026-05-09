@@ -4,12 +4,14 @@ import { X } from 'lucide-react';
 import Button from '../ui/Button';
 import FormField from '../ui/FormField';
 
-const ShopForm = ({ onClose, onSuccess }) => {
+const ShopForm = ({ onClose, onSuccess, shop = null }) => {
+  const isEditing = !!shop;
+
   const [formData, setFormData] = useState({
-    shopNumber: '',
-    shopName: '',
-    floor: 'Ground Floor',
-    monthlyRent: '',
+    shopNumber: shop?.shopNumber || '',
+    shopName: shop?.shopName || '',
+    floor: shop?.floor || 'Ground Floor',
+    monthlyRent: shop?.rentAmount || '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -24,7 +26,11 @@ const ShopForm = ({ onClose, onSuccess }) => {
     setError('');
 
     try {
-      await api.post('/shops', formData);
+      if (isEditing) {
+        await api.put(`/shops/${shop._id}`, formData);
+      } else {
+        await api.post('/shops', formData);
+      }
       onSuccess();
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong');
@@ -37,7 +43,7 @@ const ShopForm = ({ onClose, onSuccess }) => {
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-lg w-full max-w-md overflow-hidden">
         <div className="p-4 border-b border-slate-100 flex justify-between items-center">
-          <h2 className="font-semibold text-lg">Add New Shop</h2>
+          <h2 className="font-semibold text-lg">{isEditing ? 'Edit Shop' : 'Add New Shop'}</h2>
           <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full">
             <X className="w-5 h-5 text-slate-500" />
           </button>

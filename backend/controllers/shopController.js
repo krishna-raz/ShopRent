@@ -34,7 +34,7 @@ const getShop = async (req, res, next) => {
 // @access  Private
 const createShop = async (req, res, next) => {
   try {
-    const { shopNumber, shopName, floor, monthlyRent } = req.body;
+    const { shopNumber, shopName, floor, monthlyRent, rentAmount } = req.body;
 
     const shopExists = await Shop.findOne({ shopNumber });
     if (shopExists) {
@@ -47,6 +47,7 @@ const createShop = async (req, res, next) => {
       shopName,
       floor,
       monthlyRent,
+      rentAmount: rentAmount || monthlyRent,
     });
 
     await logActivity({

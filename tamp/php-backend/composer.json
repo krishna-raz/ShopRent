@@ -1,0 +1,13 @@
+{
+    "name": "shoprent/php-backend",
+    "description": "PHP Backend for Shop Rental Management System using MongoDB",
+    "require": {
+        "mongodb/mongodb": "^2.0",
+        "firebase/php-jwt": "^6.0"
+    },
+    "config": {
+        "audit": {
+            "block-insecure": false
+        }
+    }
+}

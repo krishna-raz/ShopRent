@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
-import { Plus, Store, Home, Users } from 'lucide-react';
+import { Plus, Store, Home, Users, Edit2 } from 'lucide-react';
 import PageHeader from '../components/ui/PageHeader';
 import { Card } from '../components/ui/Card';
 import Button from '../components/ui/Button';
@@ -18,6 +18,7 @@ const Shops = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isTenantFormOpen, setIsTenantFormOpen] = useState(false);
   const [selectedShop, setSelectedShop] = useState(null);
+  const [editingShop, setEditingShop] = useState(null);
   
   // Filters
   const [filterFloor, setFilterFloor] = useState('All');
@@ -82,7 +83,7 @@ const Shops = () => {
         </div>
       </div>
 
-      {isFormOpen && <ShopForm onClose={() => setIsFormOpen(false)} onSuccess={() => { setIsFormOpen(false); refreshData(); }} />}
+      {isFormOpen && <ShopForm onClose={() => setIsFormOpen(false)} onSuccess={() => { setIsFormOpen(false); setEditingShop(null); refreshData(); }} shop={editingShop} />}
       
       {isTenantFormOpen && (
         <TenantForm 
@@ -120,9 +121,18 @@ const Shops = () => {
                       <h3 className="font-bold text-xl text-slate-900">{shop.shopNumber}</h3>
                       <p className="text-xs font-bold text-indigo-600 uppercase tracking-widest mt-0.5">{shop.shopName}</p>
                     </div>
-                    <Badge variant={shop.status === 'Vacant' ? 'success' : 'warning'}>
-                      {shop.status}
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => { setEditingShop(shop); setIsFormOpen(true); }}
+                        className="p-1.5 hover:bg-slate-100 rounded-lg transition-colors"
+                        title="Edit Shop"
+                      >
+                        <Edit2 className="w-4 h-4 text-slate-500" />
+                      </button>
+                      <Badge variant={shop.status === 'Vacant' ? 'success' : 'warning'}>
+                        {shop.status}
+                      </Badge>
+                    </div>
                   </div>
                   
                   <div className="px-5 py-2 flex-1 space-y-4">

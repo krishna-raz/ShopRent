@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" --version)",
+      "PowerShell(& \"C:\\\\xampp\\\\php\\\\php.exe\" --version)",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root -e \"SHOW DATABASES;\")",
+      "PowerShell(& \"C:\\\\xampp\\\\mysql\\\\bin\\\\mysqld.exe\" --console --standalone)",
+      "Bash(\"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root)",
+      "Bash(\"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root -e \"USE shop_rental; SHOW TABLES;\")",
+      "PowerShell(& \"C:\\\\xampp\\\\apache\\\\bin\\\\httpd.exe\" -k start -n apache)",
+      "Bash(cat \"C:\\\\xampp\\\\apache\\\\logs\\\\error.log\" 2>/dev/null | tail -30)",
+      "Read(//c/xampp/apache/logs/**)",
+      "Bash(taskkill //F //IM httpd.exe)",
+      "Bash(\"C:\\\\xampp\\\\apache\\\\bin\\\\httpd.exe\" -k start -n apache -d \"C:/xampp/apache\")",
+      "Bash(cp -r \"d:\\\\2026\\\\coding\\\\Shop Rental Management System\\\\php-backend\" \"C:\\\\xampp\\\\htdocs\\\\shop-rental-api\")",
+      "Read(//c/xampp/htdocs/**)",
+      "Bash(curl -s -X POST http://localhost/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shoprent.com\",\"password\":\"admin123\"}')",
+      "Bash(tasklist)",
+      "Bash(\"C:\\\\xampp\\\\apache\\\\bin\\\\httpd.exe\" -t)",
+      "Bash(\"C:\\\\xampp\\\\apache\\\\bin\\\\httpd.exe\")",
+      "Bash(curl -s http://localhost/shop-rental-api/)",
+      "Bash(curl -s -X POST http://localhost/shop-rental-api/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shoprent.com\",\"password\":\"admin123\"}')",
+      "Bash(curl -s \"http://localhost/shop-rental-api/index.php\" -X POST -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shoprent.com\",\"password\":\"admin123\"}')",
+      "Bash(cp \"d:\\\\2026\\\\coding\\\\Shop Rental Management System\\\\php-backend\\\\index.php\" \"C:\\\\xampp\\\\htdocs\\\\shop-rental-api\\\\index.php\" && curl -s -X POST http://localhost/shop-rental-api/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shoprent.com\",\"password\":\"admin123\"}')",
+      "Bash(curl -s http://localhost/shop-rental-api/api/shops.php)",
+      "Bash(curl -s http://localhost/shop-rental-api/index.php/api/shops)",
+      "Bash(curl -s -X POST http://localhost/shop-rental-api/ -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shoprent.com\",\"password\":\"admin123\"}' --request-target \"/api/auth/login\")",
+      "Bash(\"C:\\\\xampp\\\\apache\\\\bin\\\\httpd.exe\" -M)",
+      "Bash(\"C:\\\\xampp\\\\mysql\\\\bin\\\\mysql.exe\" -u root -e \"USE shop_rental; SELECT * FROM users;\")",
+      "Bash(\"C:\\\\xampp\\\\php\\\\php.exe\" -r \"echo password_hash\\('admin123', PASSWORD_BCRYPT\\);\")",
+      "Bash(curl -s http://localhost/shop-rental-api/api/auth/login)",
+      "Bash(curl -s -X POST http://localhost:5000/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shoprent.com\",\"password\":\"admin123\"}')",
+      "Bash(curl -s -X POST http://localhost/shop-rental-api/api/auth/login -H \"Content-Type: application/json\" -d '{\"email\":\"admin@shop.com\",\"password\":\"superpassword123\"}')"
+    ],
+    "additionalDirectories": [
+      "C:\\xampp\\htdocs\\shop-rental-api"
+    ]
+  }
+}

@@ -18,6 +18,10 @@ const shopSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Please add monthly rent amount'],
   },
+  rentAmount: {
+    type: Number,
+    required: [true, 'Please add monthly rent amount'],
+  },
   occupancyStatus: {
     type: String,
     enum: ['Vacant', 'Occupied'],

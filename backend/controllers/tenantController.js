@@ -133,7 +133,7 @@ const processRefund = async (req, res, next) => {
 
     // Record deposit transaction (non-blocking)
     setImmediate(() => {
-      const transactionType = deduction > 0 ? 'Deduction' : 'Refund';
+      const transactionType = amount > 0 ? 'Deduction' : 'Refund';
       DepositTransaction.create({
         tenantId: tenant._id,
         tenantName: tenant.tenantName,
@@ -150,7 +150,7 @@ const processRefund = async (req, res, next) => {
     setImmediate(() => {
       logActivity({
         action: 'Deposit Refund Processed',
-        description: `Refund processed for ${tenant.tenantName}. Deducted: ₹${deduction}. Refunded: ₹${refundable}. Status: ${status}`,
+        description: `Refund processed for ${tenant.tenantName}. Deducted: ₹${amount}. Refunded: ₹${newRefundable}. Status: ${status}`,
         entityType: 'Deposit',
         entityId: tenant._id,
         performedBy: req.user._id,

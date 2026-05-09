@@ -182,9 +182,9 @@ const Tenants = () => {
       )}
 
       {/* Floating Action Button (FAB) for Mobile */}
-      <button 
+      <button
         onClick={() => setIsFormOpen(true)}
-        className="md:hidden fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-200 flex items-center justify-center active:scale-95 transition-transform z-40"
+        className="md:hidden fixed bottom-20 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-lg shadow-indigo-200 flex items-center justify-center active:scale-95 transition-transform z-40"
       >
         <Plus className="w-6 h-6" />
       </button>

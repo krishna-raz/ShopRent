@@ -7,11 +7,6 @@ import FormField from '../ui/FormField';
 const ShopForm = ({ onClose, onSuccess, shop = null }) => {
   const isEditing = !!shop;
 
-  useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
-
   const [formData, setFormData] = useState({
     shopNumber: shop?.shopNumber || '',
     shopName: shop?.shopName || '',

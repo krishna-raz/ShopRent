@@ -23,11 +23,6 @@ const PaymentForm = ({ isOpen, onClose }) => {
   const activeTenants = tenants.filter(t => t.status === 'Active');
 
   useEffect(() => {
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = ''; };
-  }, []);
-
-  useEffect(() => {
     if (formData.tenantId && formData.month) {
       const selectedTenant = activeTenants.find(t => t._id === formData.tenantId);
       if (selectedTenant) {

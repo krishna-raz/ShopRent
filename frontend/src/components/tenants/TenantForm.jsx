@@ -90,9 +90,9 @@ const TenantForm = ({ onClose, onSuccess, initialShopId }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center sm:items-start sm:justify-center sm:pt-20 p-4">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white p-4 border-b border-slate-100 flex justify-between items-center z-10">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20 sm:pt-24 p-4 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[calc(100vh-160px)] overflow-y-auto mb-20 sm:mb-0">
+        <div className="sticky top-0 bg-white p-4 border-b border-slate-100 flex justify-between items-center z-20">
           <h2 className="font-semibold text-lg">Add New Tenant</h2>
           <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full">
             <X className="w-5 h-5 text-slate-500" />

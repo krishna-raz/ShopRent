@@ -45,8 +45,8 @@ const ShopForm = ({ onClose, onSuccess, shop = null }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center sm:items-start sm:justify-center sm:pt-20 p-4">
-      <div className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20 sm:pt-24 p-4 overflow-y-auto">
+      <div className="bg-white rounded-xl shadow-lg w-full max-w-md max-h-[calc(100vh-160px)] overflow-y-auto mb-20 sm:mb-0">
         <div className="p-4 border-b border-slate-100 flex justify-between items-center">
           <h2 className="font-semibold text-lg">{isEditing ? 'Edit Shop' : 'Add New Shop'}</h2>
           <button onClick={onClose} className="p-1 hover:bg-slate-100 rounded-full">
